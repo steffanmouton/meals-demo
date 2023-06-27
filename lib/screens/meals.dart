@@ -1,0 +1,44 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:meals/screens/meal_details.dart';
+import 'package:meals/widgets/meal_item.dart';
+import 'package:meals/widgets/meal_list_item.dart';
+
+import '../data/dummy_data.dart';
+import '../models/meal.dart';
+
+class MealsScreen extends StatelessWidget {
+  const MealsScreen({super.key, required this.title, required this.meals});
+
+  final String title;
+  final List<Meal> meals;
+
+  void _selectMeal(BuildContext context, Meal meal) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (ctx) => MealDetailsScreen(
+          meal: meal,
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(title),
+      ),
+      body: meals.isEmpty
+          ? const Text('No Meals Available for this Category. Sorry!')
+          : ListView.builder(
+              itemCount: meals.length,
+              itemBuilder: (ctx, index) => MealItem(
+                  meal: meals[index],
+                  onSelectMeal: () {
+                    _selectMeal(context, meals[index]);
+                  }),
+            ),
+    );
+  }
+}
